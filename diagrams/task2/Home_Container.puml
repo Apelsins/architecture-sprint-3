@@ -7,11 +7,15 @@ Person(user, "Владелец дома", "Управляет и контрол�
 System_Boundary(smartVillageEcoSystem, "Экосистема умного поселка") {
     Container(apiGateway, "API Gateway", "Nginx", "Направляет запросы пользователей в соответствующие сервисы")
 
-    Container(heatingService, "Сервис управления отоплением", "Меняет отоплене в домах")
-    Container(tempMonitoringService, "Сервис мониторинга температуры", "Читает данные о температуре в домах")
 
        Container_Boundary(heatingSubsystem, "Подсистема управления отоплением") {
+       Container(heatingService, "Сервис управления отоплением", "Меняет отоплене в домах")
+       Container(tempMonitoringService, "Сервис мониторинга температуры", "Читает данные о температуре в домах")
+
        ContainerDb(heatingDb, "База данных", "PostgreSQL", "Хранит данные о состоянии отопления и температуре")
+       Container(messageBroker, "Kafka", "Apache Kafka", "Очередь сообщений между системами")
+
+       System_Ext(sensorSystem, "Датчики и реле", "Меняют температуру")
 
     }
 }
@@ -21,5 +25,9 @@ Rel(apiGateway, heatingService, "Направляет команды управ�
 Rel(apiGateway, tempMonitoringService, "Направляет запросы мониторинга температуры")
 Rel(heatingService, heatingDb, "Читает и записывает данные о состоянии отопления")
 Rel(tempMonitoringService, heatingDb, "Читает и логирует данные о температуре")
+
+Rel(sensorSystem, messageBroker, "Взаимодействие через Kafka", "<->")
+Rel(heatingService, messageBroker, "Меняет температуру")
+Rel(tempMonitoringService, messageBroker, "Получает данные о температуре")
 
 @enduml

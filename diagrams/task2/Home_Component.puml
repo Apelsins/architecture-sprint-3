@@ -20,6 +20,9 @@ System_Boundary(c1, "Микросервисная система") {
     }
 
     ContainerDb(heatingDatabase, "База данных отопления", "PostgreSQL", "Хранит данные об отоплении")
+    Container(messageBroker, "Kafka", "Apache Kafka", "Очередь сообщений между системами")
+
+    System_Ext(sensorSystem, "Датчики и реле", "Меняют температуру")
 }
 
 Rel(heating, apiGateway, "Взаимодействует с Api Gateway")
@@ -33,5 +36,9 @@ Rel(apiGateway, tempMonitoringController, "Взаимодействует с к�
 Rel(tempMonitoringController, tempMonitoringService, "Использует для чтения данных")
 Rel(tempMonitoringService, tempMonitoringRepository, "Использует для работы с базой данных")
 Rel(tempMonitoringRepository, heatingDatabase, "Читает данные")
+
+Rel(sensorSystem, messageBroker, "Взаимодействие через Kafka", "<->")
+Rel(messageBroker, heatingRepository, "Меняет температуру")
+Rel(messageBroker, tempMonitoringRepository, "Получает данные о температуре")
 
 @enduml

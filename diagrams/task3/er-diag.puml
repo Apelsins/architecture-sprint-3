@@ -50,7 +50,7 @@ entity TelemetryData {
 
 User ||--o{ House : "owns"
 House ||--o{ Device : "contains"
-Device ||--|| DeviceType : "is of type"
+DeviceType ||--o{ Device : "owns"
 Device ||--o{ Module : "contains"
 Module ||--o{ TelemetryData : "collects"
 @enduml

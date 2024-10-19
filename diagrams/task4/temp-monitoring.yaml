@@ -7,7 +7,7 @@ servers:
   - url: /api/temp-monitoring
     description: Base URL for the Temperature Monitoring API
 paths:
-  /{id}:
+  /api/temp-monitoring/{id}:
     get:
       summary: Get heating system details
       tags:
@@ -32,7 +32,7 @@ paths:
         '500':
           description: Server error
 
-  /{id}/current-temperature:
+  /api/temp-monitoring/{id}/current-temperature:
     get:
       summary: Get current temperature of the heating system
       tags:
